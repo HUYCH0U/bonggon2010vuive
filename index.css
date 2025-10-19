@@ -65,6 +65,7 @@ body {
 .flowers {
   position: relative;
   transform: scale(0.9);
+  will-change: transform; /* Tối ưu GPU cho animation mượt trên mobile */
 }
 
 .flower {
@@ -602,4 +603,102 @@ body {
 
 @keyframes grow-ans {
   0% { transform: scale(0); opacity: 0; }
+}
+
+/* Responsive cho mobile - giữ chiều cao hoa gần gốc, điều chỉnh để đều và cao hơn */
+@media (max-width: 768px) and (orientation: portrait) {  /* Portrait tablet/mobile */
+  body {
+    align-items: center;  /* Căn giữa theo chiều dọc để hoa cao hơn */
+    perspective: 600px;
+    min-height: 100vh;
+  }
+
+  .flowers {
+    transform: scale(0.8);  /* Scale nhẹ hơn để giữ chiều cao gần gốc */
+    bottom: 0;  /* Đặt hoa căn giữa viewport */
+  }
+
+  .flower {
+    bottom: 0;  /* Bắt đầu từ giữa viewport thay vì đáy */
+  }
+
+  .flower__line {
+    height: calc(60vmin + 10vh);  /* Tăng chiều cao bằng vh để cao hơn trên mobile dọc */
+  }
+
+  .flower--1 .flower__line {
+    height: calc(70vmin + 15vh);
+  }
+
+  .flower--2 .flower__line {
+    height: calc(60vmin + 10vh);
+  }
+
+  .flower--3 .flower__line {
+    height: calc(55vmin + 10vh);
+  }
+
+  /* Giảm blur nhẹ */
+  .night {
+    filter: blur(0.05vmin);
+  }
+
+  .flower__leafs::after {
+    filter: blur(6vmin);
+  }
+
+  /* Giữ animation mượt */
+  .flower__light {
+    animation-duration: 3.5s;
+  }
+
+  .flower__grass {
+    bottom: 0;
+  }
+
+  .flower__grass--bottom {
+    height: calc(25vmin + 5vh);
+  }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {  /* Mobile nhỏ portrait */
+  .flowers {
+    transform: scale(0.7);  /* Scale vừa phải, giữ cao */
+  }
+
+  .flower__line {
+    height: calc(50vmin + 20vh);  /* Ưu tiên vh để hoa cao đầy màn hình */
+  }
+
+  .flower--1 .flower__line {
+    height: calc(60vmin + 20vh);
+  }
+
+  .flower--2 .flower__line {
+    height: calc(50vmin + 20vh);
+  }
+
+  .flower--3 .flower__line {
+    height: calc(45vmin + 20vh);
+  }
+
+  /* Ẩn bớt light nếu cần, nhưng giữ để animation đều */
+  .flower__light--8 {
+    display: none;
+  }
+}
+
+/* Landscape mode - giữ gần desktop */
+@media (orientation: landscape) and (max-height: 500px) {
+  body {
+    align-items: flex-end;
+  }
+
+  .flowers {
+    transform: scale(0.85);
+  }
+
+  .flower {
+    bottom: 5vmin;
+  }
 }
